@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-
+	"mpozdal/remitly/services/csvparser"
 	"mpozdal/remitly/cmd/api"
 	"mpozdal/remitly/config"
 	"mpozdal/remitly/db"
@@ -25,6 +25,15 @@ func main() {
 		log.Fatal(err)
 	}
 	initDatabase(dbm)
+
+	csvparser := csvparser.NewCSVParser(config.Envs.CSVFilePath)
+
+	_, _, err = csvparser.ParseRecords()
+
+	if err != nil {
+		log.Fatal("Error reading CSV file", err)
+
+	}
 
 	server := api.NewAPIServer(":8080")
 	if err := server.Run(); err != nil {
