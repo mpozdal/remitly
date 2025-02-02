@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS countries (
+		countryISO2 VARCHAR(2) PRIMARY KEY,
+		countryName VARCHAR(255) NOT NULL
+);
