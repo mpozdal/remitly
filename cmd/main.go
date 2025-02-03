@@ -23,6 +23,7 @@ func main() {
 		AllowNativePasswords: true,
 		ParseTime:            true,
 	})
+	log.Println()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -41,7 +42,7 @@ func main() {
 		log.Println("Error inserting data", err)
 	}
 
-	server := api.NewAPIServer(":8080")
+	server := api.NewAPIServer(":"+config.Envs.Port, dbm)
 	if err := server.Run(); err != nil {
 		log.Fatal(err)
 	}

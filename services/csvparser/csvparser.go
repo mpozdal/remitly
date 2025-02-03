@@ -18,6 +18,7 @@ func NewCSVParser(filePath string) *CSVPareser {
 }
 
 func (cp *CSVPareser) ReadRecords() ([][]string, error) {
+	log.Println(cp.FilePath)
 	file, err := os.Open(cp.FilePath)
 	if err != nil {
 		log.Fatal("Error opening file")
