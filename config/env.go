@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"log"
 	"os"
 )
 
@@ -33,7 +32,6 @@ func initConfig() Config {
 func getEnv(key, fallback string) string {
 
 	if value, ok := os.LookupEnv(key); ok {
-		log.Println(value)
 		return value
 	}
 	return fallback
