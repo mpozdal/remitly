@@ -3,8 +3,8 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"mpozdal/remitly/types"
+	"net/http"
 )
 
 func SortBanks(banks []types.Bank) []types.Bank {
@@ -21,6 +21,7 @@ func SortBanks(banks []types.Bank) []types.Bank {
 
 	return append(headquarters, branches...)
 }
+
 func WriteJSONMessage(w http.ResponseWriter, status int, v any) error {
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(status)
@@ -45,7 +46,6 @@ func ParseJSON(r *http.Request, v any) error {
 
 	return json.NewDecoder(r.Body).Decode(v)
 }
-
 
 func ReturnBankReponse(banks []types.Bank) []types.BankResponse {
 
