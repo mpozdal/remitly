@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"log"
 	"mpozdal/remitly/cmd/api"
@@ -10,7 +9,6 @@ import (
 	"mpozdal/remitly/services/csvparser"
 	"mpozdal/remitly/types"
 	"mpozdal/remitly/utils"
-	"os"
 
 	"github.com/go-sql-driver/mysql"
 )
@@ -26,43 +24,25 @@ func main() {
 		AllowNativePasswords: true,
 		ParseTime:            true,
 	})
-	log.Println()
+
 	if err != nil {
 		log.Fatal(err)
 	}
 	initDatabase(dbm)
-	for {
-		fmt.Println("Do you want to load data from file? (y/n)")
-		scanner := bufio.NewScanner(os.Stdin)
-		if scanner.Scan() {
-			input := scanner.Text()
-			if input == "Y" || input == "y" {
-				csvparser := csvparser.NewCSVParser(config.Envs.CSVFilePath)
 
-				countries, banks, err := csvparser.ParseRecords()
+	csvparser := csvparser.NewCSVParser(config.Envs.CSVFilePath)
 
-				if err != nil {
-					log.Fatal("Error reading CSV file", err)
+	countries, banks, err := csvparser.ParseRecords()
 
-				}
-				err = insertData(dbm, countries, banks)
-				if err != nil {
-					log.Println("Error inserting data", err)
-				}
-				fmt.Println("Data has been loaded")
-				break
-			} else if input == "N" || input == "n" {
-				fmt.Println("Load data has been cancelled")
-				break
-			} else {
-				fmt.Println("Input 'Y' or 'N'")
+	if err != nil {
+		log.Fatal("Error reading CSV file", err)
 
-			}
-		}
-		if err := scanner.Err(); err != nil {
-			log.Fatal(err)
-		}
 	}
+	err = insertData(dbm, countries, banks)
+	if err != nil {
+		log.Println("Error inserting data", err)
+	}
+	fmt.Println("Data has been loaded")
 
 	server := api.NewAPIServer(":"+config.Envs.Port, dbm)
 	if err := server.Run(); err != nil {

@@ -32,8 +32,9 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Użyj absolutnej ścieżki do migracji w kontenerze
 	m, err := migrate.NewWithDatabaseInstance(
-		"file://cmd/migrate/migrations",
+		"file:///app/migrations", // Zmieniono na absolutną ścieżkę
 		"mysql",
 		driver,
 	)
@@ -55,5 +56,4 @@ func main() {
 			log.Fatal(err)
 		}
 	}
-
 }

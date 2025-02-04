@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+
+  db:
+    image: mysql:8.0
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 55
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: mypassword
+      MYSQL_DATABASE: swift
+
+  api:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    volumes:
+      - .:/go/src/api
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: mypassword
+      DB_NAME: swift
+    stdin_open: true
+    tty: true
+    links:
+      - db
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db_data:
