@@ -26,11 +26,20 @@ To get the application up and running using Docker, follow these steps:
     git clone https://github.com/mpozdal/remitly.git
     cd remitly
     ```
-2. Build and start the application using docker-compose:
+2. Build the application using docker-compose:
     ```bash
-    docker-compose up --build
+    docker-compose build --no-cache
     ```
-3. The application will now be accessible at http://localhost:8080
+3. Run tests:
+    ```bash
+    docker-compose up test
+    ```
+4. Start the application:
+    ```bash
+    docker-compose up
+    ```
+5. The application will now be accessible at http://localhost:8080
+
 
 ## Requirements ⚙️
 
