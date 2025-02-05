@@ -2,7 +2,10 @@ package config
 
 import (
 	"fmt"
+	"log"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 type Config struct {
@@ -17,23 +20,24 @@ type Config struct {
 
 var Envs = initConfig()
 
+// 初始化配置
 func initConfig() Config {
+	// 加载.env文件
+	err := godotenv.Load()
+	// 如果加载失败，则输出错误信息并退出程序
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
+	// 返回配置信息
 	return Config{
-		PublicHost:  getEnv("PUBLIC_HOST", os.Getenv("PUBLIC_HOST")),
-		Port:        getEnv("PORT", "8080"),
-		DBName:      getEnv("DB_NAME", "swift"),
-		DBAddress:   fmt.Sprintf("%s:%s", getEnv("DB_HOST", "127.0.0.1"), getEnv("DB_PORT", "3306")),
-		DBUser:      getEnv("DB_USER", "root"),
-		DBPassword:  getEnv("DB_PASSWORD", "mypassword"),
-		CSVFilePath: getEnv("CSV_FILE_PATH", "assets/data.csv"),
+		// 公共主机
+		PublicHost:  os.Getenv("PUBLIC_HOST"),
+		Port:        os.Getenv("PORT"),
+		DBName:      os.Getenv("DB_NAME"),
+		DBAddress:   fmt.Sprintf("%s:%s", os.Getenv("DB_HOST"), os.Getenv("DB_PORT")),
+		DBUser:      os.Getenv("DB_USER"),
+		DBPassword:  os.Getenv("DB_PASSWORD"),
+		CSVFilePath: os.Getenv("CSV_FILE_PATH"),
 	}
-}
-func getEnv(key, fallback string) string {
-
-	if value, ok := os.LookupEnv(key); ok {
-		return value
-	}
-	return fallback
-
 }

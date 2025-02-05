@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-
+    
   db:
     image: mysql:8.0
     healthcheck:
@@ -14,8 +14,8 @@ services:
     ports:
       - "3307:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: mypassword
-      MYSQL_DATABASE: swift
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
 
   api:
     build: 
@@ -26,11 +26,13 @@ services:
       - .:/go/src/api
     ports:
       - "8080:8080"
+    env_file:
+      - .env
     environment:
       DB_HOST: db
-      DB_USER: root
-      DB_PASSWORD: mypassword
-      DB_NAME: swift
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
     stdin_open: true
     tty: true
     links:
@@ -38,6 +40,11 @@ services:
     depends_on:
       db:
         condition: service_healthy
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: remitly-tests
 
 volumes:
   db_data:

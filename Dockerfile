@@ -21,5 +21,6 @@ COPY --from=builder /app/main .
 
 COPY cmd/migrate/migrations /app/migrations
 COPY assets /app/assets
+COPY .env /app
 
 CMD ["sh", "-c", "./migrate up && exec ./main"]
