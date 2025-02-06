@@ -13,6 +13,9 @@ type DBManager struct {
 	DB *sql.DB
 }
 
+func NewDBManagerWithCon(db *sql.DB) (*DBManager, error) {
+	return &DBManager{DB: db}, nil
+}
 func NewDBManager(cfg mysql.Config) (*DBManager, error) {
 	db, err := sql.Open("mysql", cfg.FormatDSN())
 	if err != nil {
@@ -42,7 +45,6 @@ func (db *DBManager) AddBank(bank types.Bank) (bool, error) {
 	}
 	return rowsAffected > 0, nil
 }
-
 
 func (db *DBManager) DeleteBank(swiftCode string) (bool, error) {
 

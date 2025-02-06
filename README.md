@@ -30,16 +30,19 @@ To get the application up and running using Docker, follow these steps:
     ```bash
     docker-compose build --no-cache
     ```
-3. Run tests:
+3. If you want to run integration and unit tests:
     ```bash
-    docker-compose up test
+       docker-compose up db-test test
     ```
-4. Start the application:
+4. If you just want to run the application:
+    ```bash
+    docker-compose up db api
+    ```
+5. If you want to run the application with tests:
     ```bash
     docker-compose up
     ```
-5. The application will now be accessible at http://localhost:8080
-
+6. The application will now be accessible at http://localhost:8080
 
 ## Requirements ⚙️
 
